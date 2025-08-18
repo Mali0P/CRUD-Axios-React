@@ -1,16 +1,44 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { postStore } from '../store/fetchPost'
 import Form from './Form'
+import EditForm from './EditForm'
+import DeleteForm from './DeleteForm'
 
 export default function Hero() {
-  let {products,setProducts,deleteProduct} = postStore()
+  let {products,setProducts,editStatus,updatedProducts} = postStore()
+        const[curData,dataFun] = useState({
+        title:'',
+        body:''
+})
+
   useEffect(()=>{
 setProducts()
   },[setProducts])
 
-let handleDeletePost = async(id)=>{
- await deleteProduct(id)
+useEffect(() => {
+  if (!editStatus) return; 
+
+  const curValue = products.find((p) => p.id === editStatus);
+
+  if (curValue) {
+    dataFun({
+      title: curValue.title,
+      body: curValue.body
+    });
+  }
+}, [editStatus, products]);
+
+const handleInputChange = (e)=>{
+  let name = e.target.name
+  let value = e.target.value
+  
+  dataFun((prev)=>({
+    ...prev,
+    [name] :value
+  }))
 }
+
+
 
     return (
     <div className='container'>
@@ -20,12 +48,18 @@ let handleDeletePost = async(id)=>{
  {
     products.map((val,index)=>{
         return (
-<div key={val.id||index} className='my-8 bg-white px-5 py-8'>
-<h2 className='font-bold text-lg'>{val.title}</h2>
+<div key={index} className='my-8 bg-white px-5 py-8'>{editStatus===val.id?
+<>
+<input type="text" name='title' value={curData.title} onChange={handleInputChange}  className='font-bold text-lg border formInput'/>
+<input type="text" name='body' value={curData.body} onChange={handleInputChange} className='font-[300] text-[14px] mb-5 mt-3 border formInput' />
+</>:<><h2 className='font-bold text-lg'>{val.title}</h2>
 <p className='font-[300] text-[14px] mb-5 mt-3'>{val.body}</p>
+</>
+  }
+
 <div>
-<button className='btn bg-[#4de000] text-white mr-4'>Edit</button>
-<button className='btn bg-[red] text-white' onClick={()=>{handleDeletePost(val.id)}}>Delete</button>
+<EditForm curData={curData}   index={val.id}/>
+<DeleteForm index={val.id}/>
 </div>
 
 </div>
