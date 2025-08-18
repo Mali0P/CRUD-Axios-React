@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
-import { postStore } from '../store/postStore'
+import { postStore } from '../store/fetchPost'
+import Form from './Form'
 
 export default function Hero() {
   let {products,setProducts,deleteProduct} = postStore()
@@ -13,12 +14,13 @@ let handleDeletePost = async(id)=>{
 
     return (
     <div className='container'>
-<h1 className=' font-[600] text-4xl'>CRUD Operation</h1>
+<h1 className=' font-[600] text-4xl mb-8'>CRUD Operation</h1>
+<Form/>
 <div className='grid grid-cols-4 grid-rows-3 gap-8'>
  {
-    products.map((val)=>{
+    products.map((val,index)=>{
         return (
-<div key={val.id} className='my-8 bg-white px-5 py-8'>
+<div key={val.id||index} className='my-8 bg-white px-5 py-8'>
 <h2 className='font-bold text-lg'>{val.title}</h2>
 <p className='font-[300] text-[14px] mb-5 mt-3'>{val.body}</p>
 <div>

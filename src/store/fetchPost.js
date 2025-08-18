@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { getProducts } from "../services/fetchProductList";
+import { getPosts } from "../services/fetchPosts";
 import { deletePost } from "../services/deletePost";
 
 
@@ -8,10 +8,8 @@ export const postStore = create((set,get)=>{
        products:[],
        product:null,
        setProducts: async ()=>{
-        if(get().products.length){
-            return get().products
-        }
-          const products= await getProducts()
+        if(get().products.length) return;
+          const products= await getPosts()
   set({
     products
   })
@@ -22,7 +20,14 @@ export const postStore = create((set,get)=>{
    set({
     products:get().products.filter((val)=>val.id!==id)
    })
+  },
+  addProduct:(post)=>{
+let products = [...get().products,post]
+set({
+  products
+})
   }
+
       }
 
 })

@@ -8,4 +8,7 @@
 .btn{
   @apply rounded-[50px] w-fit px-8 py-3 cursor-pointer text-[12px] font-[500]
 }
+.formInput{
+  @apply bg-[white] mr-8 px-8 py-3 text-sm outline-none rounded-[50px] border border-[rgb(0,0,0,0.3)]
+}
 }
